@@ -99,10 +99,10 @@ impl View for SearchView {
         self.edit.call_on_any(selector, &mut |v| callback(v));
     }
 
-    fn focus_view(&mut self, selector: &Selector<'_>) -> Result<(), ViewNotFound> {
+    fn focus_view(&mut self, selector: &Selector<'_>) -> Result<EventResult, ViewNotFound> {
         if let Selector::Name(s) = selector {
             self.edit_focused = s == &"search_edit";
-            Ok(())
+            return Ok(EventResult::Consumed(None));
         } else {
             Err(ViewNotFound)
         }

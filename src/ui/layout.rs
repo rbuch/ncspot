@@ -7,7 +7,7 @@ use cursive::event::{AnyCb, Event, EventResult};
 use cursive::theme::{ColorStyle, ColorType, Theme};
 use cursive::traits::View;
 use cursive::vec::Vec2;
-use cursive::view::{IntoBoxedView, Selector};
+use cursive::view::{IntoBoxedView, Selector, CannotFocus};
 use cursive::views::EditView;
 use cursive::{Cursive, Printer};
 use unicode_width::UnicodeWidthStr;
@@ -322,7 +322,7 @@ impl View for Layout {
         }
     }
 
-    fn take_focus(&mut self, source: Direction) -> bool {
+    fn take_focus(&mut self, source: Direction) -> Result<EventResult, CannotFocus> {
         if self.cmdline_focus {
             return self.cmdline.take_focus(source);
         }
@@ -330,7 +330,7 @@ impl View for Layout {
         if let Some(view) = self.get_current_view_mut() {
             view.take_focus(source)
         } else {
-            false
+            Err(CannotFocus)
         }
     }
 }
